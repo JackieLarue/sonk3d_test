@@ -10,9 +10,11 @@ void UpdateSonicInput(playerwk* pwp)
 
     pwp->input.jump.down = IsGamepadButtonDown(pwp->input.gamepad, pwp->input.jump.keyMap);
     pwp->input.jump.press = IsGamepadButtonPressed(pwp->input.gamepad, pwp->input.jump.keyMap);
+    pwp->input.jump.release = IsGamepadButtonReleased(pwp->input.gamepad, pwp->input.jump.keyMap);
 
     pwp->input.roll.down = IsGamepadButtonDown(pwp->input.gamepad, pwp->input.roll.keyMap);
     pwp->input.roll.press = IsGamepadButtonPressed(pwp->input.gamepad, pwp->input.roll.keyMap);
+    pwp->input.roll.release = IsGamepadButtonReleased(pwp->input.gamepad, pwp->input.roll.keyMap);
 
     pwp->input.stick_mag = sqrtf((stick_x * stick_x) + (stick_y * stick_y));
     if (pwp->input.stick_mag > 0.15f)

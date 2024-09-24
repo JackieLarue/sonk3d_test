@@ -84,6 +84,7 @@ typedef struct AnimFrame {
 typedef struct {
 	bool down;
 	bool press;
+	bool release;
 	int keyMap;
 } InputState;
 

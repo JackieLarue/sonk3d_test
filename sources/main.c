@@ -192,8 +192,8 @@ playerwk InitializePlayer()
     player.input.stick_mag = 0.0f;
     player.input.stick_angle = 0.0f;
 
-    player.input.jump = (InputState) { false, false, GAMEPAD_BUTTON_RIGHT_FACE_DOWN };
-    player.input.roll = (InputState) { false, false, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT };
+    player.input.jump = (InputState) { false, false, false, GAMEPAD_BUTTON_RIGHT_FACE_DOWN };
+    player.input.roll = (InputState) { false, false, false, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT };
 
     player.collider = (Capsule){ (Vector3) { 0.0f, 1.5f, 0.0f }, (Vector3){ 0.0f, 8.5f, 0.0f }, 1.5f };
 
@@ -210,7 +210,7 @@ void SonicTheHedgehog(playerwk* pwp) {
             PGetRotation();
             PRotatedByGravity();
             PGetAcceleration(pwp);
-            //CollideAndSlide(pwp->spd, pwp->t.translation, 0, false, pwp->spd); don't know about this one chief
+            //HardcodedCollision(pwp);
             if () {}
             break;
         case WALK:
