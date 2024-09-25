@@ -1,5 +1,14 @@
 #include "main.h"
 
+player_state GetWalkState(playerwk* pwp)
+{
+	if (fabsf(pwp->spd.x) > 0.01f) {
+		return WALK;
+	} else {
+		return IDLE;
+	}
+}
+
 bool CheckJump(playerwk* pwp)
 {
 	//Check for jumping
