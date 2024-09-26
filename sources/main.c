@@ -1,7 +1,4 @@
-#include "raylib.h"
-#include "raymath.h"
 #include "main.h"
-#include <stdio.h>
 
 #define SCREEN_WIDTH (1920)
 #define SCREEN_HEIGHT (1080)
@@ -207,10 +204,10 @@ void SonicTheHedgehog(playerwk* pwp) {
     switch(pwp->pl_state) 
     {
         case IDLE:
-            PGetRotation();
-            PRotatedByGravity();
+            PGetRotation(pwp);
+            PRotatedByGravity(pwp);
             PGetAcceleration(pwp);
-            //HardcodedCollision(pwp);
+            HardcodedCollision(pwp);
             if () {}
             break;
         case WALK:
@@ -237,7 +234,6 @@ void SonicTheHedgehog(playerwk* pwp) {
             break;
     }
     */
-    //printf("\nX: %f Y: %f Z: %f", pwp->t.translation.x, pwp->t.translation.y, pwp->t.translation.z);
     
     //pwp->t.translation = Vector3Add(pwp->t.translation, SpdToPos(pwp->spd));
 }

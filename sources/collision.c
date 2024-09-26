@@ -193,12 +193,12 @@ BoundingBox GetCapsuleAABB(Capsule cap)
     return bound;
 }
 
-void HardcodedCollision(playerwk* pwp, BoundingBox floor) 
+void HardcodedCollision(playerwk* pwp) 
 {
-    BoundingBox playerBox = GetCapsuleAABB(pwp->collider);
-    if (CheckCollisionBoxes(playerBox, floor)) 
+    if (pwp->t.translation.y < 5.0f) 
     {
-
+        pwp->t.translation.y = 5.0f;
+        pwp->spd.y = 0.0f;
     }
 }
 

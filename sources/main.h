@@ -1,6 +1,7 @@
 #pragma once
 
-#include "raylib.h"
+#include <raylib.h>
+#include <raymath.h>
 #include "enums.h"
 #include <ccd/ccd.h>
 #include <ccd/vec3.h>
