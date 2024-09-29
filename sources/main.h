@@ -101,6 +101,13 @@ typedef struct SONIC_INPUT
 	InputState roll;
 } SONIC_INPUT;
 
+typedef struct ControlState 
+{
+	bool has_control;
+	float stick_mag;
+	float last_turn;
+} ControlState;
+
 typedef struct Polyhedron 
 {
 	int vertexCount;
@@ -147,7 +154,7 @@ typedef struct CollPoints
 
 typedef struct TimersAndSuch 
 {
-	float jump_timer;
+	int jump_timer;
 	float spring_timer;
 	float dashpanel_timer;
 	float dashring_timer;

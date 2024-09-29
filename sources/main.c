@@ -145,7 +145,7 @@ playerwk InitializePlayer()
     //Movement state
     player.frict_mult = 1.0f;
     
-    player.timer.jump_timer = 0.0f;
+    player.timer.jump_timer = 0;
     player.timer.spring_timer = 0.0f;
     player.timer.dashpanel_timer = 0.0f;
     player.timer.dashring_timer = 0.0f;
@@ -183,7 +183,7 @@ playerwk InitializePlayer()
     //player.mS.anims = LoadModelAnimations(ASSETS_PATH"/models/sonk/sonk3.gltf", &player.mS.animsCount);
 
     //Input setup
-    player.input.gamepad = 0.0f;
+    player.input.gamepad = 0;
     player.input.stick_x = 0.0f;
     player.input.stick_y = 0.0f;
     player.input.stick_mag = 0.0f;

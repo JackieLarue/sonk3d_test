@@ -25,9 +25,9 @@ Vector3 SpdToPos(Vector3 spd)
 
 float PGetDecel(float spd, float dec) 
 {
-	if (spd > 0) {
+	if (spd > 0.0f) {
 		return -fminf(spd, -dec);
-	} else if (spd < 0) {
+	} else if (spd < 0.0f) {
 		return fminf(-spd, dec);
 	}
 	return 0.0f;
@@ -60,7 +60,7 @@ void PAdjustAngleYQ(float analog_turn, playerwk* pwp)
 {
 	Vector3 prev_spd = ToGlobal(pwp->spd, pwp);
 	analog_turn = Clamp(analog_turn, DEG2RAD * -45.0f, DEG2RAD * 45.0f);
-	analog_turn = PTurn(analog_turn, pwp);
+	PTurn(analog_turn, pwp);
 	
 	pwp->spd = ToLocal(prev_spd, pwp);
 }
@@ -68,13 +68,13 @@ void PAdjustAngleYQ(float analog_turn, playerwk* pwp)
 void PAdjustAngleYS(float analog_turn, playerwk* pwp)
 {
 	Vector3 prev_spd = ToGlobal(pwp->spd, pwp);
-	float max_turn = DEG2RAD * 1.40625;
+	float max_turn = DEG2RAD * 1.40625f;
 	
 	if (pwp->spd.x > pwp->p.dash_speed)
 		max_turn = fmaxf(max_turn - (sqrtf((pwp->spd.x - pwp->p.dash_speed) * 0.0625f)), 0.0f);
 	
 	analog_turn = Clamp(analog_turn, -max_turn, max_turn);
-	analog_turn = PTurn(analog_turn, pwp);
+	PTurn(analog_turn, pwp);
 	
 	float inertia;
 	if (pwp->dotp <= -0.4f) {
@@ -102,22 +102,25 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 	else {
 		max_turn = 11.25f * DEG2RAD;
 	}
-	analog_turn = PTurn(analog_turn, pwp);
+	
+	PTurn(analog_turn, pwp);
 
-	if (pwp->attr != 4) {
+	if (pwp->flag != Status_Ground|Status_OnColli) {
 		pwp->spd = Vector3Add(Vector3Scale(pwp->spd, 0.1f), Vector3Scale(ToLocal(prev_spd, pwp), 0.9f));
-	} else {
+	} 
+	else 
+	{
 		float inertia;
 		if (has_control) 
 		{
 			if (pwp->dotp <= 0.4f) {
 				inertia = 0.5f;
 			} else {
-				inertia = 0.01f;
+				inertia = 0.99f;
 			}
 		}
 		else {
-			inertia = 0.95f;
+			inertia = 0.05f;
 		}
 
 		if (pwp->frict_mult < 1.0f) {
@@ -135,37 +138,36 @@ void PRotatedByGravity(playerwk* pwp)
 	Vector3 grav_norm = Vector3Normalize(pwp->gravity);
 	float dotp = Vector3DotProduct(Vector3Normalize(a1a), grav_norm);
 
-	if (Vector3Length(a1a) <= pwp->p.jog_speed || dotp >= -0.86)
+	if (Vector3Length(a1a) <= pwp->p.jog_speed || dotp >= -0.86f)
 	{
 		Vector3 a2a = ToLocal(grav_norm, pwp);
 
-		if (a2a.y <= 0 && a2a.y > -0.87)
+		if (a2a.y <= 0.0f && a2a.y > -0.87f)
 		{
 			//Get turn
-			if (a2a.x < 0) {
-				a2a.x *= -1;
+			if (a2a.x < 0.0f) {
+				a2a.x = -a2a.x;
 			}
 
-			float turn = -atan2(a2a.z, a2a.x);
+			float turn = -atan2f(a2a.z, a2a.x);
 
 			//Get max turn
-			if (a2a.z < 0) {
-				a2a.z *= -1;
+			if (a2a.z < 0.0f) {
+				a2a.z = -a2a.z;
 			}
 
 			float max_turn;
 			if (pwp->flag = Status_Ball) { 
-				max_turn = a2a.z * (DEG2RAD * 16.875);
+				max_turn = a2a.z * (DEG2RAD * 16.875f);
 			} else {
-				max_turn = a2a.z * (DEG2RAD * 8.4375);
+				max_turn = a2a.z * (DEG2RAD * 8.4375f);
 			}
 
 			//Turn
 			turn = Clamp(turn, -max_turn, max_turn);
-			return PTurn(turn, pwp);
+			PTurn(turn, pwp);
 		}
 	}
-	return 0;
 }
 
 void PRotatedByGravityS(playerwk *pwp)
@@ -177,37 +179,36 @@ void PRotatedByGravityS(playerwk *pwp)
 	{
 		float dotp = Vector3DotProduct(Vector3Normalize(a1a), grav_norm);
 
-		if (dotp > -0.86)
+		if (dotp > -0.86f)
 		{
 			Vector3 a2a = ToLocal(grav_norm, pwp);
 
-			if (a2a.y > -0.87) {
+			if (a2a.y > -0.87f) {
 				//Get turn
-				if (a2a.x < 0) {
-					a2a.x *= -1.0f;
+				if (a2a.x < 0.0f) {
+					a2a.x = -a2a.x;;
 				}
 
-				float turn = -atan2(a2a.z, a2a.x);
+				float turn = -atan2f(a2a.z, a2a.x);
 
 				//Get max turn
-				if (a2a.z < 0) {
-					a2a.z *= -1.0f;
+				if (a2a.z < 0.0f) {
+					a2a.z = -a2a.z;
 				}
 
 				float max_turn;
 				if (pwp->flag == Status_Ball) {
-					max_turn = fabsf((pwp->spd.x / pwp->p.jog_speed) * a2a.z * (DEG2RAD * 22.5));
+					max_turn = fabsf((pwp->spd.x / pwp->p.jog_speed) * a2a.z * (DEG2RAD * 22.5f));
 				} else {
-					max_turn = a2a.z * (DEG2RAD * 11.25);
+					max_turn = a2a.z * (DEG2RAD * 11.25f);
 				}
 
 				//Turn
 				turn = Clamp(turn, -max_turn, max_turn);
-				return PTurn(turn, pwp);
+				PTurn(turn, pwp);
 			}
 		}
 	}
-	return 0;
 }
 
 void PGetRotation(playerwk *pwp)
@@ -240,7 +241,7 @@ void AlignToGravity(playerwk* pwp)
 
 		if (!FloatEquals(turn, 0.0f))
 		{
-			float max_turn = DEG2RAD * 11.25;
+			float max_turn = DEG2RAD * 11.25f;
 			float lim_turn = Clamp(turn, -max_turn, max_turn);
 
 			Quaternion next_ang = QuaternionMultiply(FromToRotationQuat(from, to), angle);
@@ -287,7 +288,7 @@ void PGetInertia(playerwk* pwp) {
 	}
 
 	//Air drag
-	if (pwp->flag == Status_Ball && pwp->dotp < 0.98) {
+	if (pwp->flag == Status_Ball && pwp->dotp < 0.98f) {
 		acc.x += pwp->spd.x * -0.0002f;
 	} else {
 		acc.x += pwp->spd.x * pwp->p.air_resist;
