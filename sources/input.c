@@ -1,6 +1,5 @@
-#include "main.h"
-#include "raylib.h"
-#include "raymath.h"
+#include "input.h"
+
 #include <math.h>
 
 void UpdateSonicInput(playerwk* pwp)
@@ -8,15 +7,22 @@ void UpdateSonicInput(playerwk* pwp)
     float stick_x = GetGamepadAxisMovement(pwp->input.gamepad, GAMEPAD_AXIS_LEFT_X);
     float stick_y = GetGamepadAxisMovement(pwp->input.gamepad, GAMEPAD_AXIS_LEFT_Y);
 
-    pwp->input.jump.down = IsGamepadButtonDown(pwp->input.gamepad, pwp->input.jump.keyMap);
-    pwp->input.jump.press = IsGamepadButtonPressed(pwp->input.gamepad, pwp->input.jump.keyMap);
-    pwp->input.jump.release = IsGamepadButtonReleased(pwp->input.gamepad, pwp->input.jump.keyMap);
+    int gamepad = pwp->input.gamepad;
+    int jump_map = pwp->input.jump.keyMap;
+    int roll_map = pwp->input.roll.keyMap;
 
-    pwp->input.roll.down = IsGamepadButtonDown(pwp->input.gamepad, pwp->input.roll.keyMap);
-    pwp->input.roll.press = IsGamepadButtonPressed(pwp->input.gamepad, pwp->input.roll.keyMap);
-    pwp->input.roll.release = IsGamepadButtonReleased(pwp->input.gamepad, pwp->input.roll.keyMap);
+    pwp->input.jump.down = IsGamepadButtonDown(gamepad, jump_map);
+    pwp->input.jump.press = IsGamepadButtonPressed(gamepad, jump_map);
+    pwp->input.jump.release = IsGamepadButtonReleased(gamepad, jump_map);
+
+    pwp->input.roll.down = IsGamepadButtonDown(gamepad, roll_map);
+    pwp->input.roll.press = IsGamepadButtonPressed(gamepad, roll_map);
+    pwp->input.roll.release = IsGamepadButtonReleased(gamepad, roll_map);
 
     pwp->input.stick_mag = sqrtf((stick_x * stick_x) + (stick_y * stick_y));
+    pwp->input.stick_angle = atan2f(-stick_x, stick_y);
+    pwp->input.stick_turn = 0.0f;
+
     if (pwp->input.stick_mag > 0.15f)
     {
         if (pwp->input.stick_mag > 1.0f) {

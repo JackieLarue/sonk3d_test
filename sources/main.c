@@ -128,9 +128,9 @@ playerwk InitializePlayer()
     player.t.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 
     //Initialize player state
-    player.hpos = 0.0f;
-    player.eff = Vector3Zero();
-    player.acc = Vector3Zero();
+    //player.hpos = 0.0f;
+    //player.eff = Vector3Zero();
+    //player.acc = Vector3Zero();
     player.spd = Vector3Zero();
     player.last_up = Vector3Zero();
 
@@ -211,27 +211,68 @@ void SonicTheHedgehog(playerwk* pwp) {
             if () {}
             break;
         case WALK:
+            PGetAcceleration(pwp);
+            HardcodedCollision(pwp);
             break;
         case SKID:
+            PGetSkidSpeed(pwp);
+            HardcodedCollision(pwp);
             break;
         case SPINDASH:
+            PGetRotation(pwp);
+            PGetBrake(pwp);
+            HardcodedCollision(pwp);
             break;
         case ROLL:
+            PGetRotation(pwp);
+            PGetInertia(pwp);
+            HardcodedCollision(pwp);
             break;
         case AIRBORNE:
+            PGetAccelerationAir(pwp);
+            if (pwp->timer.spring_timer <= 0 && pwp->timer.dashring_timer <= 0) {
+                AlignToGravity(pwp);
+            }
+            float fall_ysp = -pwp->spd.y;
+            pwp->grounded = false;
+            HardcodedCollision(pwp);
+            
+            if (pwp->grounded) 
+            {
+                //landed
+                if (fabsf(pwp->spd.x) < pwp->p.jog_speed) 
+                {
+                    pwp->spd.x = 0.0f;
+                    pwp->pl_state = IDLE;
+                }
+                else {
+                    pwp->pl_state = GetWalkState(pwp);
+                }
+                pwp->Status = 
+            }
             break;
-        case HOMING:
-            break;
-        case BOUNCE:
-            break;
-        case RAIL:
-            break;
-        case LIGHTDASH:
-            break;
-        case AIRKICK:
-            break;
-        case HURT:
-            break;
+        //case HOMING:
+        //    
+        //    HardcodedCollision(pwp);
+        //    break;
+        //case BOUNCE:
+        //    
+        //    HardcodedCollision(pwp);
+        //    break;
+        //case RAIL:
+        //    break;
+        //case LIGHTDASH:
+        //    
+        //    HardcodedCollision(pwp);
+        //    break;
+        //case AIRKICK:
+        //    
+        //    HardcodedCollision(pwp);
+        //    break;
+        //case HURT:
+        //    
+        //    HardcodedCollision(pwp);
+        //    break;
     }
     */
     

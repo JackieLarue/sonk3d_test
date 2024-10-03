@@ -23,6 +23,18 @@ Vector3 SpdToPos(Vector3 spd)
 	return (Vector3) { spd.z, spd.y, -spd.x };
 }
 
+Vector3 ToSpeed(playerwk* pwp, Vector3 vector) 
+{
+	Vector3 speed = ToLocal(vector, pwp);
+	return PosToSpd(speed);
+}
+
+Vector3 FromSpeed(playerwk* pwp, Vector3 vector)
+{
+	Vector3 speed = ToGlobal(vector, pwp);
+	return SpdToPos(speed);
+}
+
 float PGetDecel(float spd, float dec) 
 {
 	if (spd > 0.0f) {
@@ -56,6 +68,18 @@ float PTurn(float turn, playerwk* pwp)
 	return turn;
 }
 
+//void OriginBasis(playerwk* pwp, Quaternion basis, float inertia)
+//{
+//	Vector3 prev_speed = ToSpeed(pwp->spd);
+//	pwp->t.rotation = (basis * Basis).Orthonormalized();
+//	Velocity = Velocity * inertia + FromSpeed(prev_speed) * (1.0f - inertia);
+//}
+
+//void OriginRotate(playerwk* pwp, Vector3 axis, float angle, float inertia) 
+// {
+//	OriginBasis(pwp, QuaternionFromAxisAngle(axis, angle), inertia);
+// }
+
 void PAdjustAngleYQ(float analog_turn, playerwk* pwp) 
 {
 	Vector3 prev_spd = ToGlobal(pwp->spd, pwp);
@@ -69,6 +93,7 @@ void PAdjustAngleYS(float analog_turn, playerwk* pwp)
 {
 	Vector3 prev_spd = ToGlobal(pwp->spd, pwp);
 	float max_turn = DEG2RAD * 1.40625f;
+	Vector3 spd_scaled, prev_spd_scaled;
 	
 	if (pwp->spd.x > pwp->p.dash_speed)
 		max_turn = fmaxf(max_turn - (sqrtf((pwp->spd.x - pwp->p.dash_speed) * 0.0625f)), 0.0f);
@@ -82,7 +107,10 @@ void PAdjustAngleYS(float analog_turn, playerwk* pwp)
 	} else {
 		inertia = 0.01f;
 	}
-	pwp->spd = Vector3Add(Vector3Scale(pwp->spd, (1.0f - inertia)), Vector3Scale(ToLocal(prev_spd, pwp), inertia));
+	
+	spd_scaled = Vector3Scale(pwp->spd, (1.0f - inertia));
+	prev_spd_scaled = Vector3Scale(ToLocal(prev_spd, pwp), inertia);
+	pwp->spd = Vector3Add(spd_scaled, prev_spd_scaled);
 }
 
 void PAdjustAngleY(float analog_turn, playerwk* pwp)
@@ -90,6 +118,8 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 	bool has_control = GetAnalog(pwp);
 	Vector3 prev_spd = ToGlobal(pwp->spd, pwp);
 	float max_turn = fabsf(analog_turn);
+
+	Vector3 spd_scaled, prev_spd_scaled;
 
 	if (max_turn <= 45.0f * DEG2RAD) 
 	{
@@ -105,8 +135,10 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 	
 	PTurn(analog_turn, pwp);
 
-	if (pwp->flag != Status_Ground|Status_OnColli) {
-		pwp->spd = Vector3Add(Vector3Scale(pwp->spd, 0.1f), Vector3Scale(ToLocal(prev_spd, pwp), 0.9f));
+	if (pwp->flag != Status_Ground|Status_OnColli) 
+	{
+		spd_scaled = Vector3Scale(pwp->spd, 0.1f);
+		prev_spd_scaled = Vector3Scale(ToLocal(prev_spd, pwp), 0.9f);
 	} 
 	else 
 	{
@@ -127,8 +159,10 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 			inertia *= pwp->frict_mult;
 		}
 		
-		pwp->spd = Vector3Add(Vector3Scale(pwp->spd, (1.0f - inertia)), Vector3Scale(ToLocal(prev_spd, pwp), inertia));
+		spd_scaled = Vector3Scale(pwp->spd, (1.0f - inertia));
+		prev_spd_scaled = Vector3Scale(ToLocal(prev_spd, pwp), inertia);
 	}
+	pwp->spd = Vector3Add(spd_scaled, prev_spd_scaled);
 }
 
 //Rotation / turning
@@ -255,7 +289,7 @@ void AlignToGravity(playerwk* pwp)
 }
 
 //Acceleration / friction
-void PGetSkidSpeed(playerwk* pwp)
+void PGetBrake(playerwk* pwp)
 {
 	//Get physics values
 	float weight = pwp->p.weight;

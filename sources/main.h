@@ -2,40 +2,10 @@
 
 #include <raylib.h>
 #include <raymath.h>
+
 #include "enums.h"
-#include <ccd/ccd.h>
-#include <ccd/vec3.h>
-
-typedef struct PL_LANDPOSI
-{
-	float x;
-	float y;
-	float z;
-	float r;
-	float d;
-	float h;
-	int angy_dif;
-	int angy_aim;
-} PL_LANDPOSI;
-
-typedef struct mtnjvwk
-{
-	__int16 mtnmode;
-	__int16 jvmode;
-	unsigned __int16 reqaction;
-	unsigned __int16 action;
-	unsigned __int16 lastaction;
-	unsigned __int16 nextaction;
-	unsigned __int16 acttimer;
-	__int16 flag;
-	float nframe;
-	float start_frame;
-	float* spdp;
-	float* workp;
-	//PL_ACTION* plactptr;
-	//PL_JOIN_VERTEX* pljvptr;
-	//NJS_ACTION* actwkptr;
-} mtnjvwk;
+#include "collision.h"
+#include "input.h"
 
 typedef struct player_parameter
 {
@@ -82,76 +52,6 @@ typedef struct AnimFrame {
 	unsigned int animCurrentFrame;
 } AnimFrame;
 
-typedef struct {
-	bool down;
-	bool press;
-	bool release;
-	int keyMap;
-} InputState;
-
-typedef struct SONIC_INPUT
-{
-	int gamepad;
-	float stick_x;
-	float stick_y;
-	float stick_mag;
-	float stick_angle;
-	//bool jumpButton;
-	InputState jump;
-	InputState roll;
-} SONIC_INPUT;
-
-typedef struct ControlState 
-{
-	bool has_control;
-	float stick_mag;
-	float last_turn;
-} ControlState;
-
-typedef struct Polyhedron 
-{
-	int vertexCount;
-	Vector3 *vertices;
-} Polyhedron;
-
-typedef Transform OrientedBoundingBox;
-
-typedef struct Sphere 
-{
-	Vector3 pos;
-	float radius;
-} Sphere;
-
-typedef struct Capsule 
-{
-	Vector3 base;
-	Vector3 tip;
-	float radius;
-} Capsule;
-
-typedef enum ShapeType { POLYHEDRON, AABB, OBB, SPHERE, CAPSULE } ShapeType;
-typedef struct Shape 
-{
-	ShapeType type;
-	union 
-	{
-		Polyhedron p;
-		BoundingBox bb;
-		OrientedBoundingBox obb;
-		Sphere s;
-		Capsule c;
-	};
-} Shape;
-
-typedef struct CollPoints 
-{
-	Vector3 a;
-	Vector3 b;
-	Vector3 normal;
-	float depth;
-	bool hasCollision;
-} CollPoints;
-
 typedef struct TimersAndSuch 
 {
 	int jump_timer;
@@ -165,11 +65,11 @@ typedef struct TimersAndSuch
 
 typedef struct playerwk
 {
-	float hpos;
+	//float hpos;
 	float dotp;
 	Transform t;
-	Vector3 eff;
-	Vector3 acc;
+	//Vector3 eff;
+	//Vector3 acc;
 	Vector3 spd;
 	Vector3 gravity;
 	Vector3 wall_normal;
@@ -182,14 +82,10 @@ typedef struct playerwk
 	float last_turn;
 	float frict_mult;
 	TimersAndSuch timer;
-	//csts* cstsp;
-	//PL_FACE* pfp;
 	//ModelStruct mS;
-	//PL_LANDPOSI* island_list;
 	player_parameter p;
 	player_state pl_state;
 	Capsule collider;
-	//mtnjvwk mj;
 	SONIC_INPUT input;
 	Camera cam;
 } playerwk;
@@ -201,9 +97,9 @@ playerwk InitializePlayer();
 void SonicTheHedgehog(playerwk* pwp);
 
 void UpdateSonicInput(playerwk* pwp);
-float GetAnalog_Turn(playerwk *pwp);
-float GetAnalog_Mag(playerwk* pwp);
-bool GetAnalog(playerwk* pwp);
+float GetAnalog_Turn(playerwk* pwp);
+float GetAnalog_Mag(playerwk* pwp); 
+bool GetAnalog(playerwk* pwp); 
 
 Vector3 ToLocal(Vector3 gv, playerwk *pwp);
 Vector3 ToGlobal(Vector3 lv, playerwk *pwp);

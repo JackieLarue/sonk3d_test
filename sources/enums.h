@@ -27,13 +27,13 @@ typedef enum player_state
 	SKID,
 	SPINDASH,
 	ROLL,
-	AIRBORNE,
-	HOMING,
-	BOUNCE,
-	RAIL,
-	LIGHTDASH,
-	AIRKICK,
-	HURT
+	AIRBORNE
+	//HOMING,
+	//BOUNCE,
+	//RAIL,
+	//LIGHTDASH,
+	//AIRKICK,
+	//HURT
 } player_state;
 
 typedef enum ColFlags

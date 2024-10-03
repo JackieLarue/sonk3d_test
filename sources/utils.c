@@ -1,6 +1,4 @@
 #include "main.h"
-#include "raylib.h"
-#include "raymath.h"
 #include <math.h>
 
 float Saturate(float f) 
