@@ -259,7 +259,8 @@ void PGetAirAcceleration(playerwk* pwp) {
 	pwp->spd = Vector3Add(pwp->spd, Vector3Multiply(pwp->spd, Vector3DivideValue( (Vector3){ pwp->p.air_resist_air, pwp->p.air_resist_y, pwp->p.air_resist_z }, (1.0f + pwp->timer.rail_trick) )));
 
 	//Use lighter gravity if A is held or doing a rail trick
-	if ( (pwp->timer.rail_trick > 0.0f) || (pwp->timer.jump_timer > 0.0f && pwp->flag == Status_Ball && pwp->input.jump.down) ) {
+	if ( (pwp->timer.rail_trick > 0.0f) || (pwp->timer.jump_timer > 0.0f && pwp->flag == Status_Ball && pwp->input.jump.down) ) 
+	{
 		pwp->timer.jump_timer = max(pwp->timer.jump_timer - 1, 0);
 		pwp->spd.y += pwp->p.jmp_addit * 0.8f * (1.0f + pwp->timer.rail_trick / 2.0f);
 	}

@@ -87,43 +87,43 @@ playerwk InitializePlayer()
     playerwk player = { 0 };
     
     player.p = (player_parameter) { 
-        60,
-        2.0f,
-        16.0f,
-        16.0f,
-        3.0f,
-        0.6f,
-        1.66f,
-        3.0f,
-        0.23f,
-        0.46f,
-        1.39f,
-        2.3f,
-        3.7f,
-        5.09f,
-        0.076f,
-        0.05f,
-        0.031f,
-        -0.06f,
-        -0.18f,
-        -0.17f,
-        -0.028f,
-        -0.008f,
-        -0.001f,
-        -0.4f,
-        -0.1f,
-        -0.6f,
-        -0.2825f,
-        0.3f,
-        4.0f,
-        10.0f,
-        0.08f,
-        7.0f,
-        5.4f
+        60,       //how long in frames can sonic "hang" in air while jumping
+        2.0f,     //amount of grip on floor or smthn
+        16.0f,    //hard limit h speed cap
+        16.0f,    //hard limit v speed cap
+        3.0f,     //"soft" h speed cap
+        0.6f,     //max push object speed
+        1.66f,    //initial jump speed
+        3.0f,     //nocontrol i.e spring speed
+        0.23f,    //slide speed (lost world slide?)
+        0.46f,    //jog speed - rolling cancel speed as well
+        1.39f,    //run speed - rolling end speed as well
+        2.3f,     //rush speed (normal run speed methinks)
+        3.7f,     //crash speed, min speed to get knocked back when hitting wall, affects pushing speed too?
+        5.09f,    //dash speed - normally shouldn't be at this speed, but if you are, sonic gets some top speed anim and steering is hard
+        0.076f,   //speed added when holding jump
+        0.05f,    //ground accel
+        0.031f,   //air accel
+        -0.06f,   //ground decel
+        -0.18f,   //ground brake speed 
+        -0.17f,   //air brake speed 
+        -0.028f,  //air decel (lmao called air_resist_air)
+        -0.008f,  //rolling decel (in air too i guess) (called air_resist. gosh, ain't that confusing naming?)
+        -0.01f,   //called air_resist_y, drag for y_spd
+        -0.4f,    //called air_resist_z, drag for z_spd
+        -0.1f,    //grd_frict - min speed before stopping, affects spindash charging and braking
+        -0.6f,    //grd_frict_z - affects movement on sloped surfaces
+        -0.2825f, //lim_frict - affects accel on ground. limit of how much friction affects char???
+        0.3f,     //rat_bound - idk lol
+        4.0f,     //rad - sonic retro says something about "Ripple Size?" like. stepping in puddle??
+        10.0f,    //sonic col height - bro is 1m tall thats a block in minecraft
+        0.08f,    //called "weight", technically gravity scales with this value, i.e "heavier" chars fall faster. kinda funny
+        7.0f,     //eyes_height - camera y offset
+        5.4f      //center_height - y offset of player
     };
 
     //Set transform
-    player.t.translation = (Vector3){ 0.0f, 5.0f, 0.0f }; // Set model position
+    player.t.translation = (Vector3){ 0.0f, player.p.center_height, 0.0f }; // Set model position
     player.t.rotation = (Quaternion){ 0.0f, 0.0f, 0.0f, 0.0f };
     player.t.scale = (Vector3){ 1.0f, 1.0f, 1.0f };
 
@@ -208,7 +208,10 @@ void SonicTheHedgehog(playerwk* pwp) {
             PRotatedByGravity(pwp);
             PGetAcceleration(pwp);
             HardcodedCollision(pwp);
-            if () {}
+            if (pwp->grounded == false) 
+            {
+                pwp->pl_state = AIRBORNE;
+            }
             break;
         case WALK:
             PGetAcceleration(pwp);
@@ -247,8 +250,7 @@ void SonicTheHedgehog(playerwk* pwp) {
                 }
                 else {
                     pwp->pl_state = GetWalkState(pwp);
-                }
-                pwp->Status = 
+                } 
             }
             break;
         //case HOMING:
