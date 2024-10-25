@@ -4,7 +4,8 @@ player_state GetWalkState(playerwk* pwp)
 {
 	if (fabsf(pwp->spd.x) > 0.01f) {
 		return WALK;
-	} else {
+	} 
+	else {
 		return IDLE;
 	}
 }

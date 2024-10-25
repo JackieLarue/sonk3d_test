@@ -228,14 +228,10 @@ void PGetAcceleration(playerwk* pwp)
 	float move_accel = 0.0f;
 
 	//Movement
-	if (has_control)
-	{
-		//Get acceleration
+	if (has_control) {
 		move_accel = PStickAccel(pwp, analogue_turn, analogue_mag, frict_mult);
 	}
-	else 
-	{
-		//Decelerate
+	else {
 		move_accel = PGetDecel(pwp->spd.x + acc.x, pwp->p.slow_down);
 	}
 
@@ -261,7 +257,7 @@ void PGetAirAcceleration(playerwk* pwp) {
 	//Use lighter gravity if A is held or doing a rail trick
 	if ( (pwp->timer.rail_trick > 0.0f) || (pwp->timer.jump_timer > 0.0f && pwp->flag == Status_Ball && pwp->input.jump.down) ) 
 	{
-		pwp->timer.jump_timer = max(pwp->timer.jump_timer - 1, 0);
+		pwp->timer.jump_timer = MAX(pwp->timer.jump_timer - 1, 0);
 		pwp->spd.y += pwp->p.jmp_addit * 0.8f * (1.0f + pwp->timer.rail_trick / 2.0f);
 	}
 	

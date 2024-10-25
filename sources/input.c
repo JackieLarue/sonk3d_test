@@ -56,7 +56,8 @@ float GetAnalog_Turn(playerwk *pwp)
 
         if (!FloatEquals(Vector3Length(cam_look), 0.0f)) {
             cam_look = Vector3Normalize(cam_look);
-        } else {
+        } 
+        else {
             cam_look = look;
         }
         Vector3 cam_move = { 0 };
@@ -71,7 +72,8 @@ float GetAnalog_Turn(playerwk *pwp)
 
         if (!FloatEquals(Vector3Length(final_move), 0.0f)) {
             final_move = Vector3Normalize(final_move);
-        } else {
+        } 
+        else {
             final_move = look;
         }
 

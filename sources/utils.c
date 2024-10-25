@@ -26,9 +26,11 @@ float Vector3SignedAngle(Vector3 from, Vector3 to, Vector3 up)
 
 	if (FloatEquals(rdot, 0.0f)) {
 		rdot = 1.0f;
-	} if (dot >= 1.0f) {
+	} 
+	if (dot >= 1.0f) {
 		return 0.0f;
-	} else if (dot <= -1) {
+	} 
+	else if (dot <= -1) {
 		return -PI * rdot;
 	}
 	return acosf(dot) * rdot;
@@ -81,9 +83,11 @@ Quaternion FromToRotationQuat(Vector3 from, Vector3 to)
 	//Create quat from axis and angle
 	if (angle <= -PI) {
 		return QuaternionFromAxisAngle((Vector3) { 0.0f, 0.0f, 1.0f }, PI);
-	} else if (!FloatEquals(Vector3Length(axis), 0.0f)) {
+	} 
+	else if (!FloatEquals(Vector3Length(axis), 0.0f)) {
 		return QuaternionFromAxisAngle(axis, angle);
-	} else {
+	} 
+	else {
 		return QuaternionIdentity();
 	}
 }

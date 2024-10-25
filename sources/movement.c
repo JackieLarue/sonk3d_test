@@ -39,7 +39,8 @@ float PGetDecel(float spd, float dec)
 {
 	if (spd > 0.0f) {
 		return -fminf(spd, -dec);
-	} else if (spd < 0.0f) {
+	} 
+	else if (spd < 0.0f) {
 		return fminf(-spd, dec);
 	}
 	return 0.0f;
@@ -104,7 +105,8 @@ void PAdjustAngleYS(float analog_turn, playerwk* pwp)
 	float inertia;
 	if (pwp->dotp <= -0.4f) {
 		inertia = 0.5f;
-	} else {
+	} 
+	else {
 		inertia = 0.01f;
 	}
 	
@@ -125,7 +127,8 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 	{
 		if (max_turn <= 22.5f * DEG2RAD) {
 			max_turn /= 8.0f;
-		} else {
+		} 
+		else {
 			max_turn /= 4.0f;
 		}
 	}
@@ -147,7 +150,8 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 		{
 			if (pwp->dotp <= 0.4f) {
 				inertia = 0.5f;
-			} else {
+			} 
+			else {
 				inertia = 0.99f;
 			}
 		}
@@ -193,7 +197,8 @@ void PRotatedByGravity(playerwk* pwp)
 			float max_turn;
 			if (pwp->flag = Status_Ball) { 
 				max_turn = a2a.z * (DEG2RAD * 16.875f);
-			} else {
+			} 
+			else {
 				max_turn = a2a.z * (DEG2RAD * 8.4375f);
 			}
 
@@ -233,7 +238,8 @@ void PRotatedByGravityS(playerwk *pwp)
 				float max_turn;
 				if (pwp->flag == Status_Ball) {
 					max_turn = fabsf((pwp->spd.x / pwp->p.jog_speed) * a2a.z * (DEG2RAD * 22.5f));
-				} else {
+				} 
+				else {
 					max_turn = a2a.z * (DEG2RAD * 11.25f);
 				}
 
@@ -324,7 +330,8 @@ void PGetInertia(playerwk* pwp) {
 	//Air drag
 	if (pwp->flag == Status_Ball && pwp->dotp < 0.98f) {
 		acc.x += pwp->spd.x * -0.0002f;
-	} else {
+	} 
+	else {
 		acc.x += pwp->spd.x * pwp->p.air_resist;
 	}
 	acc.y += pwp->spd.y * pwp->p.air_resist_y;
