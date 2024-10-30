@@ -176,7 +176,7 @@ float PStickAccel(playerwk* pwp, float analogue_turn, float analogue_mag, float 
 		{
 			if (forward_speed < pwp->p.jog_speed || diff_angle >= (DEG2RAD * 22.5f))
 			{
-				if (forward_speed < pwp->p.dash_speed || pwp->attr != ColFlags_Grounded)
+				if (forward_speed < pwp->p.dash_speed || !pwp->grounded)
 				{
 					if (forward_speed >= pwp->p.jog_speed && forward_speed <= pwp->p.rush_speed && diff_angle > (DEG2RAD * 45.0f)) {
 						move_accel *= 0.8f;
@@ -206,7 +206,7 @@ void PGetAcceleration(playerwk* pwp)
 	//Get physics values
 	float frict_mult = 1.0f;
 
-	if (pwp->attr == ColFlags_Grounded) {
+	if (pwp->grounded) {
 		frict_mult = pwp->frict_mult;
 	}
 
@@ -252,26 +252,18 @@ void PGetAirAcceleration(playerwk* pwp) {
 	pwp->spd = Vector3Add(pwp->spd, Vector3Scale(ToLocal(pwp->gravity, pwp), pwp->p.weight));
 	
 	//Air drag
-	pwp->spd = Vector3Add(pwp->spd, Vector3Multiply(pwp->spd, Vector3DivideValue( (Vector3){ pwp->p.air_resist_air, pwp->p.air_resist_y, pwp->p.air_resist_z }, (1.0f + pwp->timer.rail_trick) )));
+	pwp->spd = Vector3Add(pwp->spd, Vector3Multiply(pwp->spd, (Vector3){ pwp->p.air_resist_air, pwp->p.air_resist_y, pwp->p.air_resist_z } ));
 
-	//Use lighter gravity if A is held or doing a rail trick
-	if ( (pwp->timer.rail_trick > 0.0f) || (pwp->timer.jump_timer > 0.0f && pwp->flag == Status_Ball && pwp->input.jump.down) ) 
+	//Use lighter gravity if A is held
+	if ( pwp->timer.jump_timer > 0.0f && pwp->flag == Status_Ball && pwp->input.jump.down)
 	{
 		pwp->timer.jump_timer = MAX(pwp->timer.jump_timer - 1, 0);
-		pwp->spd.y += pwp->p.jmp_addit * 0.8f * (1.0f + pwp->timer.rail_trick / 2.0f);
+		pwp->spd.y += pwp->p.jmp_addit * 0.8f;
 	}
 	
 	//Get our acceleration
 	float accel;
-	if (pwp->timer.rail_trick > 0.0f) 
-	{
-		//Constant acceleration
-		accel = pwp->p.air_accel * (1.0f + pwp->timer.rail_trick / 2.5f);
-		pwp->last_turn = 0.0f;
-	}
-	else if (!has_control) 
-	{
-		//No acceleration
+	if (!has_control) {
 		accel = 0.0f;
 	}
 	else
@@ -293,10 +285,8 @@ void PGetAirAcceleration(playerwk* pwp) {
 
 			PAdjustAngleY(analogue_turn, pwp);
 		}
-		else
-		{
-			//Air brake
-			accel = pwp->p.air_break * analogue_mag;
+		else {
+			accel = pwp->p.air_break * analogue_mag; //Air Break
 		}
 	}
 	

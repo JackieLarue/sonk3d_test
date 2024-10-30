@@ -26,9 +26,9 @@ Vector3 ProjectAndScale(Vector3 vec, Vector3 normal)
     return vec;
 }
 
-int maxBounces = 5;
-float skinWidth = 0.015f;
-float maxSlopeAngle = 55.0f;
+const int maxBounces = 5;
+const float skinWidth = 0.015f;
+const float maxSlopeAngle = 55.0f;
 
 Vector3 CollideAndSlide(Vector3 vel, Vector3 pos, int depth, bool gravityPass, Vector3 velInit, playerwk *pwp)
 {
@@ -64,7 +64,7 @@ Vector3 CollideAndSlide(Vector3 vel, Vector3 pos, int depth, bool gravityPass, V
             
             //temp
             bool isGrounded = false;
-            if (pwp->attr == ColFlags_Grounded) {
+            if (pwp->grounded) {
                 isGrounded = true;
             }
             if (isGrounded && !gravityPass) 

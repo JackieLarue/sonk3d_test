@@ -323,7 +323,7 @@ void PGetInertia(playerwk* pwp) {
 	Vector3 acc = Vector3Scale(ToLocal(pwp->gravity, pwp), weight);
 
 	//Amplify gravity
-	if (pwp->attr == ColFlags_Grounded && pwp->spd.x > pwp->p.run_speed && pwp->dotp < 0) {
+	if (pwp->grounded && pwp->spd.x > pwp->p.run_speed && pwp->dotp < 0) {
 		acc.y *= -8.0f;
 	}
 
