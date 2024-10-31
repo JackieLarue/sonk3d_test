@@ -1,4 +1,4 @@
-#include "input.h"
+#include "main.h"
 
 #include <math.h>
 

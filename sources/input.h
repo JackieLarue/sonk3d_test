@@ -1,7 +1,5 @@
 #pragma once
 
-#include "main.h"
-
 typedef struct InputState {
 	bool down;
 	bool press;
