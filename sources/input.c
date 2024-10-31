@@ -25,7 +25,8 @@ void UpdateSonicInput(playerwk* pwp)
 
     if (pwp->input.stick_mag > 0.15f)
     {
-        if (pwp->input.stick_mag > 1.0f) {
+        if (pwp->input.stick_mag > 1.0f) 
+        {
             pwp->input.stick_x = stick_x / pwp->input.stick_mag;
             pwp->input.stick_y = stick_y / pwp->input.stick_mag;
             pwp->input.stick_mag = 1.0f;

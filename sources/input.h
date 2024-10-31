@@ -1,15 +1,15 @@
 #pragma once
 
-#include <main.h>
+#include "main.h"
 
-typedef struct {
+typedef struct InputState {
 	bool down;
 	bool press;
 	bool release;
 	int keyMap;
 } InputState;
 
-typedef struct SONIC_INPUT
+typedef struct PlayerControlState
 {
 	int gamepad;
 	float stick_x;
@@ -20,7 +20,7 @@ typedef struct SONIC_INPUT
 	//bool jumpButton;
 	InputState jump;
 	InputState roll;
-} SONIC_INPUT;
+} PlayerControlState;
 
 typedef struct ControlState
 {

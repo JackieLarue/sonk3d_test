@@ -138,7 +138,7 @@ void PAdjustAngleY(float analog_turn, playerwk* pwp)
 	
 	PTurn(analog_turn, pwp);
 
-	if (pwp->flag != Status_Ground|Status_OnColli) 
+	if (pwp->grounded) 
 	{
 		spd_scaled = Vector3Scale(pwp->spd, 0.1f);
 		prev_spd_scaled = Vector3Scale(ToLocal(prev_spd, pwp), 0.9f);

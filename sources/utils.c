@@ -74,7 +74,7 @@ bool SameDirection(const Vector3 direction, const Vector3 ao)
 	return Vector3DotProduct(direction, ao) > 0;
 }
 
-Quaternion FromToRotationQuat(Vector3 from, Vector3 to) 
+Quaternion FromToRotationQuat(Vector3 from, Vector3 to)
 {
 	//Get our axis and angle
 	Vector3 axis = Vector3CrossProduct(from, to);

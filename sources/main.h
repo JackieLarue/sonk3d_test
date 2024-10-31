@@ -89,12 +89,9 @@ typedef struct playerwk
 	player_parameter p;
 	player_state pl_state;
 	Capsule collider;
-	SONIC_INPUT input;
+	PlayerControlState input;
 	Camera cam;
 } playerwk;
-
-//Vector3 Gravity;
-//SONIC_INPUT input;
 
 playerwk InitializePlayer();
 void SonicTheHedgehog(playerwk* pwp);
